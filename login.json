@@ -1,8 +1,13 @@
 {
-    "login": [
-        {
-            "usuario": "admin",
-            "senha": "admin123"
-        }
-    ]
+    "login": {
+        "usuario": "admin",
+        "senha": "admin123"
+    },
+    "dados-cadastrais": {
+        "cpf": "450.927.956-62",
+        "dtNascimento": "1987-06-24",
+        "foto": "https://pbs.twimg.com/media/D-g98O_WwAE1Cnd.jpg",
+        "nome": "Lionel Andrés Messi Cuccittini",
+        "endereco": "Avinguda 342, Castelldefels"
+    }
 }

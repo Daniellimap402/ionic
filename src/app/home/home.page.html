@@ -30,7 +30,7 @@
           <ion-input [(ngModel)]="login.senha"></ion-input>
         </ion-item>
       </ion-list>
-      <ion-button expand="full">Entrar</ion-button>
+      <ion-button expand="full" (click)="verificarCredenciasValidas()">Entrar</ion-button>
     </ion-card-content>
   </ion-card>
 

@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      <ion-button (click)="abrirMenu()">
+        <ion-icon name="menu"></ion-icon>
+      </ion-button>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+
+  <ion-menu side="start" menuId="first" type="push" contentId="main" style="z-index: 99999999;">
+    <ion-header>
+      <ion-toolbar color="danger">
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item class="cursor-pointer" (click)="abrirMenuDadosCadastrais()"> Dados cadastrais </ion-item>
+        <ion-item class="cursor-pointer" >Conta</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main" style="display: none;"></ion-router-outlet>
+
+  <ion-card *ngIf="showDadosCadastrais">
+    <ion-card-header>
+      <ion-card-subtitle>Meus dados cadastrais</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-list lines="full" class="ion-no-margin">
+        <ion-item>
+          <ion-label>Cpf :</ion-label>
+          <ion-input [(ngModel)]="dadosCadastrais.cpf" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-item>
+          <ion-label>Idade:</ion-label>
+          <ion-input [(ngModel)]="dadosCadastrais.idade" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-item>
+          <ion-label>Nome:</ion-label>
+          <ion-input [(ngModel)]="dadosCadastrais.nome" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-item>
+          <ion-label>Endereço:</ion-label>
+          <ion-input [(ngModel)]="dadosCadastrais.endereco" [disabled]="true"></ion-input>    
+        </ion-item>
+        <img [src]="dadosCadastrais.foto" width="300" height="300">
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
