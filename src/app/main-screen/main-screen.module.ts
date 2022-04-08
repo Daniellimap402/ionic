@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { MainScreenRoutingModule } from './main-screen-routing.module';
 import { MainScreenComponent } from './main-screen.component';
@@ -12,7 +12,9 @@ import { MainScreenComponent } from './main-screen.component';
     CommonModule,
     FormsModule,
     IonicModule,
-    MainScreenRoutingModule
+    MainScreenRoutingModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   declarations: [MainScreenComponent]
 })

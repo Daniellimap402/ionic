@@ -1,13 +1,42 @@
 {
-    "login": {
-        "usuario": "admin",
-        "senha": "admin123"
+  "login": {
+    "usuario": "admin",
+    "senha": "admin123"
+  },
+  "dados-cadastrais": {
+    "cpf": "450.927.956-62",
+    "dtNascimento": "1987-06-24",
+    "foto": "https://www.ogol.com.br/img/jogadores/92/10592_lionel_messi.png",
+    "nome": "Lionel Andrés Messi Cuccittini",
+    "endereco": "Avinguda 342, Castelldefels"
+  },
+  "contas": [
+    {
+      "id": 1,
+      "numero": "291369",
+      "digito": "0",
+      "estado": "Bahia",
+      "cidade": "Alagoinhas",
+      "banco": "Nubank",
+      "agencia": "0158"
     },
-    "dados-cadastrais": {
-        "cpf": "450.927.956-62",
-        "dtNascimento": "1987-06-24",
-        "foto": "https://pbs.twimg.com/media/D-g98O_WwAE1Cnd.jpg",
-        "nome": "Lionel Andrés Messi Cuccittini",
-        "endereco": "Avinguda 342, Castelldefels"
+    {
+      "id": 2,
+      "numero": "151",
+      "digito": "1",
+      "estado": "PB",
+      "cidade": "esperanca",
+      "banco": "caixa",
+      "agencia": "2002"
+    },
+    {
+      "id": 3,
+      "numero": "10000",
+      "digito": "1",
+      "estado": "pb",
+      "cidade": "esp",
+      "banco": "caixa",
+      "agencia": "2002"
     }
+  ]
 }

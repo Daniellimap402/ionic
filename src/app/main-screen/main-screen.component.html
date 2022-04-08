@@ -4,6 +4,9 @@
       <ion-button (click)="abrirMenu()">
         <ion-icon name="menu"></ion-icon>
       </ion-button>
+      <ion-button (click)="openModal()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -20,7 +23,7 @@
     <ion-content>
       <ion-list>
         <ion-item class="cursor-pointer" (click)="abrirMenuDadosCadastrais()"> Dados cadastrais </ion-item>
-        <ion-item class="cursor-pointer" >Conta</ion-item>
+        <ion-item class="cursor-pointer" (click)="abrirMenuContas()" >Contas</ion-item>
       </ion-list>
     </ion-content>
   </ion-menu>
@@ -54,4 +57,91 @@
     </ion-card-content>
   </ion-card>
 
+  <ion-card *ngIf="showContas">
+    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max">
+    <ion-card-header>
+      <ion-card-subtitle>Minhas contas</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content *ngFor="let conta of contas; let i=index; let odd=odd;">
+      <ion-list lines="full">
+        <ion-list-header> Conta</ion-list-header>
+        <ion-item>
+          <ion-label>Número: </ion-label>
+          <ion-input [(ngModel)]="conta.numero" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-item>
+          <ion-label>Dígito: </ion-label>
+          <ion-input [(ngModel)]="conta.digito" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-item>
+          <ion-label>Agência: </ion-label>
+          <ion-input [(ngModel)]="conta.agencia" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-item>
+          <ion-label>Banco: </ion-label>
+          <ion-input [(ngModel)]="conta.banco" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-item>
+          <ion-label>Cidade: </ion-label>
+          <ion-input [(ngModel)]="conta.cidade" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-item>
+          <ion-label>Estado: </ion-label>
+          <ion-input [(ngModel)]="conta.estado" [disabled]="true"></ion-input>    
+        </ion-item>
+        <ion-button (click)="alertaConfirmacao(conta.id)">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+        <ion-button (click)="openModal(conta)">
+          <ion-icon name="pencil-outline"></ion-icon>
+        </ion-button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+
+<ion-modal [isOpen]="abrirModal">
+  <ng-template>
+    <ion-content class="titulo-form">
+      <div class="texto-titulo">
+        <h3>
+          Cadastrar conta
+        </h3>
+      </div>
+    </ion-content>
+    
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <ion-grid class="grid">
+        <ion-row justify-content-center>
+          <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+            <div padding>
+              <ion-item>
+                <ion-input formControlName="numero" name="numero" type="text" placeholder="Número"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="digito" name="digito" type="text" placeholder="Dígito"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="agencia" name="agencia" type="text" placeholder="Agência"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="estado" name="estado" type="text" placeholder="Estado"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="cidade" name="cidade" type="text" placeholder="Cidade"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="banco" name="banco" type="text" placeholder="Banco"></ion-input>
+              </ion-item>
+            </div>
+            <div padding>
+              <ion-button size="large" expand="block" (click)="fecharModal()">Cancelar</ion-button>
+              <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Salvar</ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ng-template>
+</ion-modal>
