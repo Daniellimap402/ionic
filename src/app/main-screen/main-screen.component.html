@@ -90,7 +90,7 @@
           <ion-label>Estado: </ion-label>
           <ion-input [(ngModel)]="conta.estado" [disabled]="true"></ion-input>    
         </ion-item>
-        <ion-button (click)="alertaConfirmacao(conta.id)">
+        <ion-button (click)="alertaConfirmacao(conta.$key)">
           <ion-icon name="trash"></ion-icon>
         </ion-button>
         <ion-button (click)="openModal(conta)">

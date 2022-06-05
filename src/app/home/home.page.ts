@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
+import { LoginService } from '../shared/login.service';
 import { Login } from './login';
-import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-home',
@@ -25,12 +26,14 @@ export class HomePage {
       message: 'Carregando...',
     });
     loading.present();
-    this.loginService.getLogin().subscribe(async res => {
+    this.loginService.getById(environment.idLogin).snapshotChanges().subscribe(res => {
       loading.dismiss();
-      if (res.usuario === this.login.usuario && res.senha === this.login.senha) {
+      let a = res.payload.toJSON();
+      const user = a as Login;
+      if (user.usuario === this.login.usuario && user.senha === this.login.senha) {
         this.route.navigateByUrl('/main');
       } else {
-        await this.apresentarErroCredenciais();
+        this.apresentarErroCredenciais();
       }
     });
   }

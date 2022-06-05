@@ -1,5 +1,5 @@
 export class Conta {
-    id: number;
+    $key : string;
     numero: string;
     digito: string;
     agencia: string;

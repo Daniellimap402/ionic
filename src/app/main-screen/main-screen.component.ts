@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, MenuController } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
+import { ContaService } from '../shared/conta.service';
+import { DadosCadastraisService } from '../shared/dados-cadastrais.service';
+
 import { Conta } from './conta';
 import { DadosCadastrais } from './dados-cadastrais';
-import { DadosCadastraisService } from './main-screen.service';
 
 @Component({
   selector: 'app-main-screen',
@@ -19,10 +22,11 @@ export class MainScreenComponent implements OnInit {
 
   conta: Conta = new Conta();
   showContas= false;
-  contas = [new Conta];
+  contas : Conta[] = [];
 
   constructor(
     private menu: MenuController,
+    private firebaseService: ContaService,
     private dadosCadastraisService: DadosCadastraisService,
     public loadingController: LoadingController,
     public alertController: AlertController,
@@ -37,6 +41,7 @@ export class MainScreenComponent implements OnInit {
   }
 
   openModal(conta?: Conta){
+    console.log(conta);
     this.form.patchValue(conta);
     this.conta = conta;
     this.abrirModal = true;
@@ -50,15 +55,13 @@ export class MainScreenComponent implements OnInit {
   salvar() {
     this.conta = this.form.getRawValue();
 
-    if (this.conta?.id) {
-      this.dadosCadastraisService.updateConta(this.conta).subscribe(() => {
-        this.getContas();
-      })
+    if (this.conta?.$key) {
+      this.firebaseService.updateConta(this.conta.$key, this.conta);
+      this.getContas();
     }
     else {
-      this.dadosCadastraisService.addConta(this.conta).subscribe(() => {
-        this.getContas();
-      })
+      this.firebaseService.createConta(this.conta);
+      this.getContas();
     }
     this.form.reset();
     this.abrirModal = false;
@@ -67,7 +70,7 @@ export class MainScreenComponent implements OnInit {
   
   private initForm(): void {
     this.form = this.fb.group({
-      id: [null],
+      $key: [null],
       numero: [null, Validators.required],
       digito: [null, Validators.required],
       estado: [null, Validators.required],
@@ -78,29 +81,31 @@ export class MainScreenComponent implements OnInit {
   }
 
   async abrirMenuDadosCadastrais() {
-    this.contas = [new Conta];
+    this.contas = [];
     this.showDadosCadastrais = true;
     this.showContas = false;
     const loading = await this.loadingController.create({
       message: 'Carregando...',
     });
     loading.present();
-    this.dadosCadastraisService.getDados().subscribe(res => {
-      this.dadosCadastrais = res;
-      this.dadosCadastrais.idade = this.calcularIdade(res.dtNascimento);
+    this.dadosCadastraisService.getById(environment.idDadosCadastrais).snapshotChanges().subscribe(res => {
+      loading.dismiss();
+      let a = res.payload.toJSON();
+      const dadosCadastrais = a as DadosCadastrais;
+      this.dadosCadastrais = dadosCadastrais;
+      this.dadosCadastrais.idade = this.calcularIdade(dadosCadastrais.dtNascimento);
       loading.dismiss();
     });
 
   }
 
   deleteItem(id: any){
-    this.dadosCadastraisService.deleteConta(id).subscribe( () => {
-      this.getContas();
-    });
+    this.firebaseService.deleteConta(id);
+    this.getContas();
   }
 
 
-  async alertaConfirmacao(id: number) {
+  async alertaConfirmacao(id: string) {
     const alert = await this.alertController.create({
       header: 'Alerta',
       message: 'Deseja realmente excluir esta conta?',
@@ -121,13 +126,15 @@ export class MainScreenComponent implements OnInit {
 
 
   getContas(){
-    this.dadosCadastraisService.getContas().subscribe(res => {
-      this.contas = [new Conta];
+    let contas = this.firebaseService.getContas();
+    contas.snapshotChanges().subscribe(res=> {
+      this.contas = [];
       res.forEach(ct=> {
-        this.contas.push(ct);
-      })
+        let a = ct.payload.toJSON();
+        a['$key'] = ct.key;
+        this.contas.push(a as Conta);
+      })})
       this.contas.reverse().pop();
-    });
   }
 
   async abrirMenuContas() {
@@ -137,15 +144,8 @@ export class MainScreenComponent implements OnInit {
       message: 'Carregando...',
     });
     loading.present();
-    this.dadosCadastraisService.getContas().subscribe(res => {
-      console.log(res);
-      res.forEach(ct=> {
-        this.contas.push(ct);
-      })
-      this.contas.reverse().pop();
-      loading.dismiss();
-    });
-
+    this.getContas();
+    loading.dismiss();
   }
 
   calcularIdade(dtNascimento: any): number {
